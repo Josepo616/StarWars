@@ -43,7 +43,7 @@ struct SignInView: View {
                             NavigationLink(destination: PlanetsView()) {
                                 SubmitButton(isEnabled: viewModel.isFormValid)
                             }
-                            //.disabled(!viewModel.isFormValid)
+                            g.disabled(!viewModel.isFormValid)
                             .frame(maxWidth: 400, maxHeight: 700)
                             .cornerRadius(10)
                             .padding(.horizontal)
