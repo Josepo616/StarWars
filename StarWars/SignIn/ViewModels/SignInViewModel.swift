@@ -5,62 +5,62 @@
 //  Created by JoseAlvarez on 8/26/25.
 //
 
+import Combine
 import Foundation
 import SwiftUI
 
-struct SignInViewModel {
+class SignInViewModel: ObservableObject {
 
-    // MARK: - Validations
-    func validateName(_ name: String) -> Bool {
-        return !name.isEmpty
+    @Published var formModel = SignInFormModel()
+    @Published var isNameValid: Bool = false
+    @Published var isLastNameValid: Bool = false
+    @Published var isAgeValid: Bool = false
+    @Published var isNumberPhoneValid: Bool = false
+    @Published var isEmailValid: Bool = false
+    @Published var isDocumentTypeValid: Bool = false
+    @Published var isDocumentNumberValid: Bool = false
+    @Published var isFormValid: Bool = false
+
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        setupBindings()
     }
 
-    func validateLastName(_ lastName: String) -> Bool {
-        return !lastName.isEmpty
-    }
+    // MARK: - Subscribe to validations
 
-    func validateAge(_ age: Int) -> Bool {
-        return age > 18
-    }
+    private func setupBindings() {
+        formModel.nameIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isNameValid)
 
-    func validateEmail(_ email: String) -> Bool {
-        guard !email.isEmpty else { return false }
+        formModel.lastNameIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isLastNameValid)
 
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        formModel.ageIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isAgeValid)
 
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        formModel.emailIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isEmailValid)
+        
+        formModel.numberPhoneIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isNumberPhoneValid)
 
-        return emailPredicate.evaluate(with: email)
+        formModel.documentTypeIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isDocumentTypeValid)
 
-    }
+        formModel.documentNumberIsValid
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isDocumentNumberValid)
 
-    func validatePhoneNumber(_ numberPhone: Int) -> Bool {
-        return String(numberPhone).count == 8
-    }
-
-    func validateDocumentType(_ documentType: String) -> Bool {
-        return !documentType.isEmpty
-    }
-
-    func validateDocumentNumber(
-        _ documentType: String,
-        _ documentNumber: String
-    ) -> Bool {
-        switch documentType.lowercased() {
-        case "id":
-            let idRegex = "^[0-9]{8}$"
-            return NSPredicate(format: "SELF MATCHES %@", idRegex).evaluate(
-                with: documentNumber
-            )
-
-        case "passport":
-            let passportRegex = "^[A-Za-z]{1}[0-9]{8}$"
-            return NSPredicate(format: "SELF MATCHES %@", passportRegex)
-                .evaluate(with: documentNumber)
-
-        default:
-            return false
-        }
+        formModel.isFormValidPublisher()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$isFormValid)
     }
 
     // MARK: - viewHelpers

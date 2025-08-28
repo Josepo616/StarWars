@@ -30,23 +30,24 @@ struct PersonalInformationView: View {
                 TextField("Name", text: $name)
                     .focused($isNameFocused)
                     .onChange(of: name) { oldValue, newValue in
+                        print("Name changed from: \(oldValue) to: \(newValue)")
                         nameFieldState = .typing
+                        print("nameFieldState set to typing")
                     }
-                    .onChange(of: isNameFocused) { oldValue, isFocused in
+                    .onChange(of: isNameFocused) { _, isFocused in
+                        print("isNameFocused changed: \(isFocused)")
                         if !isFocused {
-                            if name.isEmpty {
-                                nameFieldState = .failure
-                            } else if viewModel.validateName(name) {
-                                nameFieldState = .success
-                            } else {
-                                nameFieldState = .failure
-                            }
+                            print("Field lost focus. Validating name...")
+                            nameFieldState = viewModel.isNameValid ? .success : .failure
+                            print("nameFieldState set to: \(nameFieldState)")
                         }
-                        
+                    }
+                    .onChange(of: viewModel.isNameValid) { oldValue, isValid in
+                        print("isNameValid changed from: \(oldValue) to: \(isValid)")
                     }
 
                 viewModel.underlineRectangle(nameFieldState)
-                
+
                 if nameFieldState == .failure {
                     Text("Name cannot be empty")
                         .font(.caption)
@@ -54,6 +55,9 @@ struct PersonalInformationView: View {
                 }
             }
             .padding(.vertical, 8)
+        
+    
+
 
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Last Name", text: $lastName)
@@ -61,15 +65,9 @@ struct PersonalInformationView: View {
                     .onChange(of: lastName) { oldValue, newValue in
                         lastNameFieldState = .typing
                     }
-                    .onChange(of: isLastNameFocused) { oldValue, isFocused in
+                    .onChange(of: isLastNameFocused) { _, isFocused in
                         if !isFocused {
-                            if lastName.isEmpty {
-                                lastNameFieldState = .failure
-                            } else if viewModel.validateName(lastName) {
-                                lastNameFieldState = .success
-                            } else {
-                                lastNameFieldState = .failure
-                            }
+                            lastNameFieldState = viewModel.isLastNameValid ? .success : .failure
                         }
                     }
                 
@@ -95,15 +93,9 @@ struct PersonalInformationView: View {
                         }
                         ageFieldState = .typing
                     }
-                    .onChange(of: isAgeFocused) { oldValue, isFocused in
+                    .onChange(of: isAgeFocused) { _, isFocused in
                         if !isFocused {
-                            if ageText.isEmpty {
-                                ageFieldState = .failure
-                            } else if viewModel.validateAge(age) {
-                                ageFieldState = .success
-                            } else {
-                                ageFieldState = .failure
-                            }
+                            ageFieldState = viewModel.isAgeValid ? .success : .failure
                         }
                     }
                 

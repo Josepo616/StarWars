@@ -17,7 +17,7 @@ struct PlanetsModel: Decodable, Identifiable {
     let population: String
 
     
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case id = "url"
         case name = "name"
         case diameter = "diameter"

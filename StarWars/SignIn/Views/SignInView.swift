@@ -8,24 +8,8 @@
 import SwiftUI
 
 struct SignInView: View {
-
-    @Binding var name: String
-    @Binding var lastName: String
-    @Binding var age: Int
-    @Binding var number: Int
-    @Binding var email: String
-    @Binding var documentType: String
-    @Binding var documentNumber: String
-
-    var isFormValid: Bool {
-        viewModel.validateName(name) && viewModel.validateLastName(lastName)
-            && viewModel.validateAge(age) && viewModel.validateEmail(email)
-            && viewModel.validatePhoneNumber(number)
-            && viewModel.validateDocumentType(documentType)
-            && viewModel.validateDocumentNumber(documentType, documentNumber)
-    }
-
-    var viewModel = SignInViewModel()
+    
+    @ObservedObject var viewModel = SignInViewModel()
 
     var body: some View {
         NavigationStack {
@@ -36,44 +20,35 @@ struct SignInView: View {
                         .bold()
                         .padding(.top, 20)
                         .padding(.bottom, 10)
-
+                    
                     Form {
                         PersonalInformationView(
-                            name: $name,
-                            lastName: $lastName,
-                            age: $age,
+                            name: $viewModel.formModel.name,
+                            lastName: $viewModel.formModel.lastName,
+                            age: $viewModel.formModel.age,
                             viewModel: viewModel
                         )
                         ContactInformationView(
-                            number: $number,
-                            email: $email,
+                            number: $viewModel.formModel.numberPhone,
+                            email: $viewModel.formModel.email,
                             viewModel: viewModel
                         )
                         DocumentInformationView(
-                            documentType: $documentType,
-                            documentNumber: $documentNumber,
+                            documentType: $viewModel.formModel.documentType,
+                            documentNumber: $viewModel.formModel.documentNumber,
                             viewModel: viewModel
                         )
-
+                        
                         Section {
                             NavigationLink(destination: PlanetsView()) {
-                                Button(action: {
-                                }) {
-                                    Text("Submit")
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(8)
-                                }
+                                SubmitButton(isEnabled: viewModel.isFormValid)
                             }
-                            //.disabled(!isFormValid)  // Deshabilitar el botón si el formulario no es válido
-                            //.navigationTitle("Planets")
+                            //.disabled(!viewModel.isFormValid)
+                            .frame(maxWidth: 400, maxHeight: 700)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                            .scaleEffect(0.9)
                         }
-                        .frame(maxWidth: 400, maxHeight: 700)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
-                        .scaleEffect(0.9)
                     }
                 }
             }

@@ -24,7 +24,7 @@ struct DocumentInformationView: View {
                 }
             }
             .onChange(of: documentType) { oldValue, newValue in
-                if !viewModel.validateDocumentNumber(newValue, documentNumber) {
+                if !viewModel.isDocumentTypeValid {
                     documentNumberFieldState = .failure
                 }
             }
@@ -46,13 +46,7 @@ struct DocumentInformationView: View {
                     }
                     .onChange(of: isDocumentNumberFocused) { oldValue, isFocused in
                         if !isFocused {
-                            if documentNumber.isEmpty {
-                                documentNumberFieldState = .failure
-                            } else if viewModel.validateDocumentNumber(documentType, documentNumber) {
-                                documentNumberFieldState = .success
-                            } else {
-                                documentNumberFieldState = .failure
-                            }
+                            documentNumberFieldState = viewModel.isDocumentNumberValid ? .success : .failure
                         }
                     }
                 

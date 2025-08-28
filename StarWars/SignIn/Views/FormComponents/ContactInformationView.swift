@@ -25,7 +25,7 @@ struct ContactInformationView: View {
                 TextField("Number", text: $numberText)
                     .focused($isNumberFocused)
                     .keyboardType(.numberPad)
-                    .onChange(of: numberText) { oldValue, newValue in
+                    .onChange(of: numberText) { _, newValue in
                         if let newNumber = Int(newValue) {
                             number = newNumber
                         } else {
@@ -34,15 +34,9 @@ struct ContactInformationView: View {
 
                         numberFieldState = .typing
                     }
-                    .onChange(of: isNumberFocused) { oldValue, isFocused in
+                    .onChange(of: isNumberFocused) { _, isFocused in
                         if !isFocused {
-                            if numberText.isEmpty {
-                                numberFieldState = .idle
-                            } else if viewModel.validatePhoneNumber(number) {
-                                numberFieldState = .success
-                            } else {
-                                numberFieldState = .failure
-                            }
+                            numberFieldState = viewModel.isNumberPhoneValid ? .success : .failure
                         }
                     }
 
@@ -65,15 +59,9 @@ struct ContactInformationView: View {
                     .onChange(of: email) {
                         emailFieldState = .typing
                     }
-                    .onChange(of: isEmailFocused) { oldValue, isFocused in
+                    .onChange(of: isEmailFocused) { _, isFocused in
                         if !isFocused {
-                            if email.isEmpty {
-                                emailFieldState = .idle
-                            } else if viewModel.validateEmail(email) {
-                                emailFieldState = .success
-                            } else {
-                                emailFieldState = .failure
-                            }
+                            emailFieldState = viewModel.isEmailValid ? .success : .failure
                         }
                     }
                 
