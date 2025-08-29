@@ -15,9 +15,8 @@ struct SubmitButton: View {
         Text("Submit")
             .frame(maxWidth: .infinity)
             .padding()
-            .background(!isEnabled ? Color.blue : Color.gray)
             .foregroundColor(.white)
+            .background(isEnabled ? Color.blue : Color.gray)
             .cornerRadius(8)
-        
     }
 }

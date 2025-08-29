@@ -24,7 +24,7 @@ struct PlanetsView: View {
             viewModel.loadPlanetsOnStart()
         }
         .navigationTitle(Text("Planets"))
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

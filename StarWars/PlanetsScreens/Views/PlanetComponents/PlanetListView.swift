@@ -12,50 +12,23 @@ struct PlanetListView: View {
     @StateObject var viewModel: PlanetsViewModel
     @State private var currentPage: Int = 0
     private let itemsPerPage: Int = 4
-
+    
     var body: some View {
         VStack {
-            VStack(alignment: .leading, spacing: 20) {
-                ForEach(currentPageItems) { planet in
-                    PlanetRowView(planet: planet)
-                }
-            }
-            .padding()
+            PlanetListContent(
+                planets: viewModel.currentPageItems(currentPage, itemsPerPage)
+            )
+            
             Spacer()
-
-            HStack {
-                Button("Back") {
-                    if currentPage > 0 {
-                        currentPage -= 1
-                    }
-                }
-                .disabled(currentPage == 0)
-
-                Button("Next") {
-                    if currentPage < totalPages - 1 {
-                        currentPage += 1
-                    }
-                }
-                .disabled(currentPage >= totalPages - 1)
-            }
+            
+            PaginationControls(
+                currentPage: $currentPage,
+                totalPages: viewModel.totalPages(itemsPerPage),
+                pageNumbersToShow: viewModel.pageNumbersToShow(viewModel.totalPages(itemsPerPage), currentPage)
+            )
         }
         .padding()
     }
-
-    private var totalPages: Int {
-        max(
-            1,
-            Int(ceil(Double(viewModel.planets.count) / Double(itemsPerPage)))
-        )
-    }
-
-    private var currentPageItems: [PlanetsModel] {
-        let startIndex = currentPage * itemsPerPage
-        let endIndex = min(startIndex + itemsPerPage, viewModel.planets.count)
-        if startIndex < endIndex {
-            return Array(viewModel.planets[startIndex..<endIndex])
-        } else {
-            return []
-        }
-    }
 }
+
+
