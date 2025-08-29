@@ -8,23 +8,21 @@
 import SwiftUI
 
 struct PlanetListView: View {
-    @ObservedObject var viewModel: PlanetsViewModel
     
+    @StateObject var viewModel: PlanetsViewModel
     @State private var currentPage: Int = 0
     private let itemsPerPage: Int = 4
-    
+
     var body: some View {
         VStack {
             VStack(alignment: .leading, spacing: 20) {
                 ForEach(currentPageItems) { planet in
-                    //NavigationLink(destination: PlanetDetailView(planet: planet)) {
-                        PlanetRowView(planet: planet)
-                    //}
+                    PlanetRowView(planet: planet)
                 }
             }
             .padding()
             Spacer()
-            
+
             HStack {
                 Button("Back") {
                     if currentPage > 0 {
@@ -32,7 +30,7 @@ struct PlanetListView: View {
                     }
                 }
                 .disabled(currentPage == 0)
-                
+
                 Button("Next") {
                     if currentPage < totalPages - 1 {
                         currentPage += 1
@@ -43,12 +41,14 @@ struct PlanetListView: View {
         }
         .padding()
     }
-    
-    
+
     private var totalPages: Int {
-        max(1, Int(ceil(Double(viewModel.planets.count) / Double(itemsPerPage))))
+        max(
+            1,
+            Int(ceil(Double(viewModel.planets.count) / Double(itemsPerPage)))
+        )
     }
-    
+
     private var currentPageItems: [PlanetsModel] {
         let startIndex = currentPage * itemsPerPage
         let endIndex = min(startIndex + itemsPerPage, viewModel.planets.count)

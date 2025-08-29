@@ -9,29 +9,23 @@ import SwiftUI
 
 struct ContactInformationView: View {
 
-    @Binding var number: Int
+    @Binding var number: String
     @Binding var email: String
     @FocusState private var isNumberFocused: Bool
     @FocusState private var isEmailFocused: Bool
-    @State private var numberText: String = ""
     @State private var numberFieldState: FieldState = .idle
     @State private var emailFieldState: FieldState = .idle
-
     var viewModel: SignInViewModel
 
     var body: some View {
         Section(header: Text("Contact Info").font(.headline)) {
+            
+            // MARK: - Phone number input
             VStack(alignment: .leading, spacing: 4) {
-                TextField("Number", text: $numberText)
+                TextField("Phone number", text: $number)
                     .focused($isNumberFocused)
                     .keyboardType(.numberPad)
-                    .onChange(of: numberText) { _, newValue in
-                        if let newNumber = Int(newValue) {
-                            number = newNumber
-                        } else {
-                            number = 0
-                        }
-
+                    .onChange(of: number) { _, newValue in
                         numberFieldState = .typing
                     }
                     .onChange(of: isNumberFocused) { _, isFocused in
@@ -39,9 +33,7 @@ struct ContactInformationView: View {
                             numberFieldState = viewModel.isNumberPhoneValid ? .success : .failure
                         }
                     }
-
-                viewModel.underlineRectangle(numberFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: numberFieldState)
                 if numberFieldState == .failure {
                     Text(
                         "Phone number must have 8 digits, only numbers and not be empty."
@@ -51,8 +43,9 @@ struct ContactInformationView: View {
                 }
             }
 
+            // MARK: - Email input
             VStack {
-                TextField("Mail", text: $email)
+                TextField("Email", text: $email)
                     .focused($isEmailFocused)
                     .keyboardType(.emailAddress)
                     .autocapitalization(.none)
@@ -64,9 +57,7 @@ struct ContactInformationView: View {
                             emailFieldState = viewModel.isEmailValid ? .success : .failure
                         }
                     }
-                
-                viewModel.underlineRectangle(emailFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: emailFieldState)
                 if emailFieldState == .failure {
                     Text("Email is not valid, please try valid email address.")
                         .font(.caption)

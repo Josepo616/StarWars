@@ -13,11 +13,12 @@ struct DocumentInformationView: View {
     @Binding var documentNumber: String
     @FocusState private var isDocumentNumberFocused: Bool
     @State private var documentNumberFieldState: FieldState = .idle
-    
     var viewModel: SignInViewModel
 
     var body: some View {
         Section(header: Text("ID Information").font(.headline)) {
+            
+            // MARK: - Document type Picker
             Picker("Select a type of document", selection: $documentType) {
                 ForEach(["Passport", "ID"], id: \.self) { type in
                     Text(type)
@@ -35,6 +36,7 @@ struct DocumentInformationView: View {
                 }
             }
             
+            // MARK: - Document number input
             VStack(alignment: .leading) {
                 TextField("Document Number", text: $documentNumber)
                     .focused($isDocumentNumberFocused)
@@ -49,16 +51,13 @@ struct DocumentInformationView: View {
                             documentNumberFieldState = viewModel.isDocumentNumberValid ? .success : .failure
                         }
                     }
-                
-                viewModel.underlineRectangle(documentNumberFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: documentNumberFieldState)
                 if documentNumberFieldState == .failure{
                     Text(
                         documentType == "ID"
                         ? "Invalid document number for selected type (ID), please use only 8 numbers."
                         : "Invalid document number for selected type (Passport), please use a letter and then 8 numbers."
                     )
-
                     .font(.caption)
                     .foregroundColor(.red)
                 }

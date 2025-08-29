@@ -77,13 +77,6 @@ class SignInViewModel: ObservableObject {
             return .red
         }
     }
-
-    func underlineRectangle(_ Field: FieldState) -> some View {
-
-        Rectangle()
-            .frame(height: 1)
-            .foregroundColor(colorForState(Field))
-    }
 }
 
 // MARK: - enums

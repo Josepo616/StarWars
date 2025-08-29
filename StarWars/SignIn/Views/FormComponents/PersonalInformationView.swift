@@ -25,7 +25,8 @@ struct PersonalInformationView: View {
 
     var body: some View {
         Section(header: Text("Personal Information").font(.headline)) {
-            
+           
+            // MARK: - Name input
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Name", text: $name)
                     .focused($isNameFocused)
@@ -45,9 +46,7 @@ struct PersonalInformationView: View {
                     .onChange(of: viewModel.isNameValid) { oldValue, isValid in
                         print("isNameValid changed from: \(oldValue) to: \(isValid)")
                     }
-
-                viewModel.underlineRectangle(nameFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: nameFieldState)
                 if nameFieldState == .failure {
                     Text("Name cannot be empty")
                         .font(.caption)
@@ -56,9 +55,7 @@ struct PersonalInformationView: View {
             }
             .padding(.vertical, 8)
         
-    
-
-
+            // MARK: - Lastname input
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Last Name", text: $lastName)
                     .focused($isLastNameFocused)
@@ -70,9 +67,7 @@ struct PersonalInformationView: View {
                             lastNameFieldState = viewModel.isLastNameValid ? .success : .failure
                         }
                     }
-                
-                viewModel.underlineRectangle(lastNameFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: lastNameFieldState)
                 if lastNameFieldState == .failure {
                     Text("Last name cannot be empty")
                         .font(.caption)
@@ -81,6 +76,7 @@ struct PersonalInformationView: View {
             }
             .padding(.vertical, 8)
             
+            // MARK: - Age input
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Age", text: $ageText)
                     .focused($isAgeFocused)
@@ -98,9 +94,7 @@ struct PersonalInformationView: View {
                             ageFieldState = viewModel.isAgeValid ? .success : .failure
                         }
                     }
-                
-                viewModel.underlineRectangle(ageFieldState)
-
+                UnderlineRectangleView(viewModel: viewModel, field: ageFieldState)
                 if ageFieldState == .failure {
                     Text("Age must be older than 18 and cant be empty")
                         .font(.caption)

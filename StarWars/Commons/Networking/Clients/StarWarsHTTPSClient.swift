@@ -1,5 +1,5 @@
 //
-//  HTTPClient.swift
+//  StarWarsHTTPSClient.swift
 //  StarWars
 //
 //  Created by JoseAlvarez on 8/27/25.
@@ -8,7 +8,11 @@
 import Combine
 import Foundation
 
-struct HTTPClient {
+struct StarWarsHTTPSClient: PlanetsService {
+    
+    func fetchPlanets(from url: String) -> AnyPublisher<[PlanetsModel], APIError> {
+        return getMethod(from: url, type: [PlanetsModel].self)
+    }
     
     func getMethod<T: Decodable>(
         from urlString: String,
@@ -49,7 +53,9 @@ struct HTTPClient {
     private func httpError(for statusCode: Int) -> APIError {
         switch statusCode {
         case 400:
+            #if DEBUG
             print("Error: Bad Request (400)")
+            #endif
             return APIError.badRequest
         case 401:
             print("Error: Unauthorized (401)")
@@ -93,7 +99,7 @@ struct HTTPClient {
                 print(
                     "No internet connection (Code: \(urlError.code.rawValue))"
                 )
-                return .badConnection
+                return .noConnection
 
             case .timedOut:
                 print("Time response out (Code: \(urlError.code.rawValue))")

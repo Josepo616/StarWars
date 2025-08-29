@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PlanetDetailRow: View {
+    
     var title: String
     var value: String
 

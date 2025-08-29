@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject var viewModel: PlanetsViewModel
+
+    @StateObject var viewModel: PlanetsViewModel
 
     var body: some View {
         if let error = viewModel.apiError {
-            NoDataView(error: error)
+            NoDataView(error: error, viewModel: viewModel)
         } else if viewModel.loadingComplete && viewModel.planets.isEmpty {
             Text("No planets found.")
         } else {
-            NavigationStack {
-                PlanetListView(viewModel: viewModel)
-            }
+            PlanetListView(viewModel: viewModel)
         }
     }
 }

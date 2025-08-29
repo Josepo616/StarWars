@@ -66,7 +66,7 @@ extension SignInFormModel {
 
     var numberPhoneIsValid: AnyPublisher<Bool, Never> {
         $numberPhone
-            .map { String($0).count == 8 }
+            .map { $0.count == 8 }
             .eraseToAnyPublisher()
     }
 

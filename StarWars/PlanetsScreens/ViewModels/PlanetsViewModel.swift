@@ -1,5 +1,5 @@
 //
-//  MovieListViewModel.swift
+//  PlanetsViewModel.swift
 //  StarWars
 //
 //  Created by JoseAlvarez on 8/27/25.
@@ -14,21 +14,21 @@ class PlanetsViewModel: ObservableObject {
     @Published var loadingComplete: Bool = false
     @Published var apiError: APIError?
     private var cancellables: Set<AnyCancellable> = []
-    private let client: HTTPClient
+    private var planetsService: PlanetsService
 
 
-    init() {
-        self.client = HTTPClient()
+    init(planetsService: PlanetsService) {
+        self.planetsService = planetsService
     }
 
-    func loadMoviesOnAppStart() {
+    func loadPlanetsOnStart() {
         self.loadingComplete = false
         let starWarsPlanetsURL = StarWars(
             id: UUID(),
             endpoint: endpointEnum.planets.rawValue
         ).url.absoluteString
 
-        client.getMethod(from: starWarsPlanetsURL, type: [PlanetsModel].self)
+        planetsService.fetchPlanets(from: starWarsPlanetsURL)
             .sink(
                 receiveCompletion: { completion in
                     switch completion {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SignInView: View {
     
-    @ObservedObject var viewModel = SignInViewModel()
+    @StateObject var viewModel = SignInViewModel()
 
     var body: some View {
         NavigationStack {
@@ -43,7 +43,7 @@ struct SignInView: View {
                             NavigationLink(destination: PlanetsView()) {
                                 SubmitButton(isEnabled: viewModel.isFormValid)
                             }
-                            .disabled(!viewModel.isFormValid)
+                            //.disabled(!viewModel.isFormValid)
                             .frame(maxWidth: 400, maxHeight: 700)
                             .cornerRadius(10)
                             .padding(.horizontal)

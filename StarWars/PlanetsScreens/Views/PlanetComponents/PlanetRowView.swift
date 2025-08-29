@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PlanetRowView: View {
+    
     var planet: PlanetsModel
 
     var body: some View {

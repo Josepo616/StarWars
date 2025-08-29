@@ -1,5 +1,5 @@
 //
-//  MoviesModel.swift
+//  PlanetsModel.swift
 //  StarWars
 //
 //  Created by JoseAlvarez on 8/27/25.

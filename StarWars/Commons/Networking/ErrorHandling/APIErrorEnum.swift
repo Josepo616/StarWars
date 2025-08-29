@@ -11,11 +11,13 @@ enum APIError: Error {
     // URL / red
     case badUrl
     case badConnection
+    case noConnection
     case timeout
     case connectionFailed
     case hostNotFound
     case sslError
     case connectionLost
+    
 
     // HTTP status
     case badRequest  // 400
@@ -38,8 +40,10 @@ enum APIError: Error {
         // URL / red
         case .badUrl:
             return "The URL is invalid."
+        case .noConnection:
+            return "Unable to connect to the server, check your internet connection."
         case .badConnection:
-            return "Unable to connect to the server."
+            return "Unable to connect to the server"
         case .timeout:
             return "The request timed out."
         case .connectionFailed:

@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct SubmitButton: View {
-    
+
     var isEnabled: Bool
 
     var body: some View {
-        Button(action: {}) {
-            Text("Submit")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isEnabled ? Color.blue  : Color.gray)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-        }
+        Text("Submit")
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(!isEnabled ? Color.blue : Color.gray)
+            .foregroundColor(.white)
+            .cornerRadius(8)
+        
     }
 }
