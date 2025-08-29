@@ -8,23 +8,23 @@
 import SwiftUI
 
 struct PaginationControls: View {
-    
+
     @Binding var currentPage: Int
     let totalPages: Int
     let pageNumbersToShow: [Int]
-    
+
     var body: some View {
         HStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
-                    
+
                     PageButton(
                         number: 1,
                         isSelected: currentPage == 0
                     ) {
                         currentPage = 0
                     }
-                    
+
                     ForEach(pageNumbersToShow, id: \.self) { page in
                         if page == -1 {
                             Text("...")
@@ -39,7 +39,7 @@ struct PaginationControls: View {
                             }
                         }
                     }
-                    
+
                     if totalPages > 1 {
                         PageButton(
                             number: totalPages,

@@ -19,7 +19,7 @@ struct ContactInformationView: View {
 
     var body: some View {
         Section(header: Text("Contact Info").font(.headline)) {
-            
+
             // MARK: - Phone number input
             VStack(alignment: .leading, spacing: 4) {
                 TextField("Phone number", text: $number)
@@ -30,10 +30,15 @@ struct ContactInformationView: View {
                     }
                     .onChange(of: isNumberFocused) { _, isFocused in
                         if !isFocused {
-                            numberFieldState = viewModel.isNumberPhoneValid ? .success : .failure
+                            numberFieldState =
+                                viewModel.isNumberPhoneValid
+                                ? .success : .failure
                         }
                     }
-                UnderlineRectangleView(viewModel: viewModel, field: numberFieldState)
+                UnderlineRectangleView(
+                    viewModel: viewModel,
+                    field: numberFieldState
+                )
                 if numberFieldState == .failure {
                     Text(
                         "Phone number must have 8 digits, only numbers and not be empty."
@@ -54,10 +59,14 @@ struct ContactInformationView: View {
                     }
                     .onChange(of: isEmailFocused) { _, isFocused in
                         if !isFocused {
-                            emailFieldState = viewModel.isEmailValid ? .success : .failure
+                            emailFieldState =
+                                viewModel.isEmailValid ? .success : .failure
                         }
                     }
-                UnderlineRectangleView(viewModel: viewModel, field: emailFieldState)
+                UnderlineRectangleView(
+                    viewModel: viewModel,
+                    field: emailFieldState
+                )
                 if emailFieldState == .failure {
                     Text("Email is not valid, please try valid email address.")
                         .font(.caption)

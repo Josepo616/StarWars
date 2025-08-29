@@ -59,7 +59,9 @@ extension SignInFormModel {
                 guard !email.isEmpty else { return false }
 
                 let regex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-                return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: email)
+                return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(
+                    with: email
+                )
             }
             .eraseToAnyPublisher()
     }
@@ -80,7 +82,7 @@ extension SignInFormModel {
         Publishers.CombineLatest($documentType, $documentNumber)
             .map { type, number in
                 let regex: String
-                
+
                 switch type.lowercased() {
                 case "id":
                     regex = "^[0-9]{8}$"
@@ -90,9 +92,10 @@ extension SignInFormModel {
                     return false
                 }
 
-                return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: number)
+                return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(
+                    with: number
+                )
             }
             .eraseToAnyPublisher()
     }
 }
-

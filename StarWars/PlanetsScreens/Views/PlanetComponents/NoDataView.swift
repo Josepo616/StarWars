@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoDataView: View {
-    
+
     @State private var showAlert = true
     let error: APIError
     var viewModel: PlanetsViewModel

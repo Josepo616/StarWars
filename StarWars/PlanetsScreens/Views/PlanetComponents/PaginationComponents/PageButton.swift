@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct PageButton: View {
-    
+
     let number: Int
     let isSelected: Bool
     let action: () -> Void
-    
+
     var body: some View {
         Button("\(number)") {
             withAnimation(.easeInOut(duration: 0.3)) {

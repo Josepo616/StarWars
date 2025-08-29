@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlanetDetailsView: View {
-    
+
     var planet: PlanetsModel
 
     var body: some View {

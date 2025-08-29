@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DocumentInformationView: View {
-    
+
     @Binding var documentType: String
     @Binding var documentNumber: String
     @FocusState private var isDocumentNumberFocused: Bool
@@ -17,7 +17,7 @@ struct DocumentInformationView: View {
 
     var body: some View {
         Section(header: Text("ID Information").font(.headline)) {
-            
+
             // MARK: - Document type Picker
             Picker("Select a type of document", selection: $documentType) {
                 ForEach(["Passport", "ID"], id: \.self) { type in
@@ -35,7 +35,7 @@ struct DocumentInformationView: View {
                     documentType = ""
                 }
             }
-            
+
             // MARK: - Document number input
             VStack(alignment: .leading) {
                 TextField("Document Number", text: $documentNumber)
@@ -46,17 +46,24 @@ struct DocumentInformationView: View {
                     .onChange(of: documentNumber) {
                         documentNumberFieldState = .typing
                     }
-                    .onChange(of: isDocumentNumberFocused) { oldValue, isFocused in
+                    .onChange(of: isDocumentNumberFocused) {
+                        oldValue,
+                        isFocused in
                         if !isFocused {
-                            documentNumberFieldState = viewModel.isDocumentNumberValid ? .success : .failure
+                            documentNumberFieldState =
+                                viewModel.isDocumentNumberValid
+                                ? .success : .failure
                         }
                     }
-                UnderlineRectangleView(viewModel: viewModel, field: documentNumberFieldState)
-                if documentNumberFieldState == .failure{
+                UnderlineRectangleView(
+                    viewModel: viewModel,
+                    field: documentNumberFieldState
+                )
+                if documentNumberFieldState == .failure {
                     Text(
                         documentType == "ID"
-                        ? "Invalid document number for selected type (ID), please use only 8 numbers."
-                        : "Invalid document number for selected type (Passport), please use a letter and then 8 numbers."
+                            ? "Invalid document number for selected type (ID), please use only 8 numbers."
+                            : "Invalid document number for selected type (Passport), please use a letter and then 8 numbers."
                     )
                     .font(.caption)
                     .foregroundColor(.red)

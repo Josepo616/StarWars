@@ -5,8 +5,8 @@
 //  Created by JoseAlvarez on 8/28/25.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 class SignInFormModel: ObservableObject {
     @Published var name: String = ""

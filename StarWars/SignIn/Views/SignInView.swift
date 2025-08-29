@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignInView: View {
-    
+
     @StateObject var viewModel = SignInViewModel()
 
     var body: some View {
@@ -20,7 +20,7 @@ struct SignInView: View {
                         .bold()
                         .padding(.top, 20)
                         .padding(.bottom, 10)
-                    
+
                     Form {
                         PersonalInformationView(
                             name: $viewModel.formModel.name,
@@ -38,7 +38,7 @@ struct SignInView: View {
                             documentNumber: $viewModel.formModel.documentNumber,
                             viewModel: viewModel
                         )
-                        
+
                         Section {
                             NavigationLink(destination: PlanetsView()) {
                                 SubmitButton(isEnabled: viewModel.isFormValid)

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct PlanetListContent: View {
-    
+
     let planets: [PlanetsModel]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             ForEach(planets) { planet in

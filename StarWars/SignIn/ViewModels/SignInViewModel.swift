@@ -45,7 +45,7 @@ class SignInViewModel: ObservableObject {
         formModel.emailIsValid
             .receive(on: DispatchQueue.main)
             .assign(to: &$isEmailValid)
-        
+
         formModel.numberPhoneIsValid
             .receive(on: DispatchQueue.main)
             .assign(to: &$isNumberPhoneValid)

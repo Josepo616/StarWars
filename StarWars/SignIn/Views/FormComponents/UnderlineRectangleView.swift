@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UnderlineRectangleView: View {
-    
+
     var viewModel: SignInViewModel
     var field: FieldState
 

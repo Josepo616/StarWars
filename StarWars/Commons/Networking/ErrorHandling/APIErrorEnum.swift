@@ -17,7 +17,6 @@ enum APIError: Error {
     case hostNotFound
     case sslError
     case connectionLost
-    
 
     // HTTP status
     case badRequest  // 400
@@ -41,7 +40,8 @@ enum APIError: Error {
         case .badUrl:
             return "The URL is invalid."
         case .noConnection:
-            return "Unable to connect to the server, check your internet connection."
+            return
+                "Unable to connect to the server, check your internet connection."
         case .badConnection:
             return "Unable to connect to the server"
         case .timeout:

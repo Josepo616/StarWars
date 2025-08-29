@@ -9,11 +9,13 @@ import Combine
 import Foundation
 
 struct StarWarsHTTPSClient: PlanetsService {
-    
-    func fetchPlanets(from url: String) -> AnyPublisher<[PlanetsModel], APIError> {
+
+    func fetchPlanets(from url: String) -> AnyPublisher<
+        [PlanetsModel], APIError
+    > {
         return getMethod(from: url, type: [PlanetsModel].self)
     }
-    
+
     func getMethod<T: Decodable>(
         from urlString: String,
         type: T.Type,
@@ -42,7 +44,7 @@ struct StarWarsHTTPSClient: PlanetsService {
             }
             .decode(type: T.self, decoder: decoder)
             .mapError { error in
-                self.handleError(error)
+                self.urlError(error)
             }
             .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
@@ -53,94 +55,63 @@ struct StarWarsHTTPSClient: PlanetsService {
     private func httpError(for statusCode: Int) -> APIError {
         switch statusCode {
         case 400:
-            #if DEBUG
-            print("Error: Bad Request (400)")
-            #endif
             return APIError.badRequest
         case 401:
-            print("Error: Unauthorized (401)")
             return APIError.unauthorized
         case 403:
-            print("Error: Forbidden (403)")
             return APIError.forbidden
         case 404:
-            print("Error: Not Found (404)")
             return APIError.notFound
         case 429:
-            print("Error: Too Many Requests (429)")
             return APIError.tooManyRequests
         case 500:
-            print("Error: Internal Server Error (500)")
             return APIError.serverError
         case 502:
-            print("Error: Bad Gateway (502)")
             return APIError.badGateway
         case 503:
-            print("Error: Service Unavailable (503)")
             return APIError.serviceUnavailable
         case 504:
-            print("Error: Gateway Timeout (504)")
             return APIError.gatewayTimeout
         default:
-            print("Error: Unexpected Status Code (\(statusCode))")
             return APIError.unexpectedStatusCode(statusCode)
         }
     }
 
-    private func handleError(_ error: Error) -> APIError {
+    private func urlError(_ error: Error) -> APIError {
+
         if let apiError = error as? APIError {
-            print("Error launched manually: \(apiError)")
             return apiError
         }
 
         if let urlError = error as? URLError {
             switch urlError.code {
             case .notConnectedToInternet:
-                print(
-                    "No internet connection (Code: \(urlError.code.rawValue))"
-                )
                 return .noConnection
 
             case .timedOut:
-                print("Time response out (Code: \(urlError.code.rawValue))")
                 return .timeout
 
             case .cannotFindHost:
-                print(("Host not found (Code: \(urlError.code.rawValue))"))
                 return .hostNotFound
 
             case .cannotConnectToHost:
-                print(
-                    ("Cannot connect to host (Code: \(urlError.code.rawValue))")
-                )
                 return .connectionFailed
 
             case .secureConnectionFailed:
-                print(
-                    "SSL connection failed, check certificates (Code: \(urlError.code.rawValue))"
-                )
                 return .sslError
 
             case .networkConnectionLost:
-                print(
-                    "Network connection lost (Code: \(urlError.code.rawValue))"
-                )
                 return .connectionLost
 
             default:
-                print(
-                    "Another error occurred: \(urlError.localizedDescription) (Code: \(urlError.code.rawValue))"
-                )
                 return .badConnection
             }
         }
 
         if error is DecodingError {
-            print("Error in decoding")
             return .decodingError
         }
 
-        print("Unknown error: \(error)")
         return .badResponse
     }
 }

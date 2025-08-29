@@ -9,6 +9,8 @@ import Foundation
 
 extension String {
     var urlEncoded: String? {
-        return self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        return self.addingPercentEncoding(
+            withAllowedCharacters: .urlQueryAllowed
+        )
     }
 }

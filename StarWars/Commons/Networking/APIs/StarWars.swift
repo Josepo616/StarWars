@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - API model
 struct StarWars: Identifiable, Hashable {
-    
+
     var id: UUID
     var endpoint: String
     var url: URL
@@ -20,9 +20,9 @@ struct StarWars: Identifiable, Hashable {
         baseURL: URL? = URL(string: "https://swapi.info/api/")
     ) {
         guard let baseURL else {
-             fatalError("invalid default base URL")
+            fatalError("invalid default base URL")
         }
-        
+
         self.id = id
         self.endpoint = endpoint
         self.url = baseURL.appendingPathComponent(endpoint)

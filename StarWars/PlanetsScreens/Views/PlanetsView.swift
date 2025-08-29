@@ -9,8 +9,10 @@ import Combine
 import SwiftUI
 
 struct PlanetsView: View {
-    
-    @StateObject private var viewModel = PlanetsViewModel(planetsService: StarWarsHTTPSClient())
+
+    @StateObject private var viewModel = PlanetsViewModel(
+        planetsService: StarWarsHTTPSClient()
+    )
 
     var body: some View {
         VStack {
