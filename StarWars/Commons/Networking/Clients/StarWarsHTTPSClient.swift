@@ -10,6 +10,14 @@ import Foundation
 
 struct StarWarsHTTPSClient: PlanetsService {
 
+    private let session: URLSession
+    private let jsonDecoder: JSONDecoder
+
+    init(session: URLSession = .shared, decoder: JSONDecoder = JSONDecoder()) {
+        self.session = session
+        self.jsonDecoder = decoder
+    }
+
     func fetchPlanets(from url: String) -> AnyPublisher<
         [PlanetsModel], APIError
     > {
@@ -19,7 +27,7 @@ struct StarWarsHTTPSClient: PlanetsService {
     func getMethod<T: Decodable>(
         from urlString: String,
         type: T.Type,
-        decoder: JSONDecoder = JSONDecoder()
+        decoder: JSONDecoder? = nil
     ) -> AnyPublisher<T, APIError> {
 
         guard let url = URL(string: urlString) else {
@@ -29,7 +37,7 @@ struct StarWarsHTTPSClient: PlanetsService {
 
         let urlRequest = URLRequest(url: url)
 
-        return URLSession.shared.dataTaskPublisher(for: urlRequest)
+        return session.dataTaskPublisher(for: urlRequest)
             .tryMap { result in
                 guard let httpResponse = result.response as? HTTPURLResponse
                 else {
@@ -42,7 +50,7 @@ struct StarWarsHTTPSClient: PlanetsService {
 
                 return result.data
             }
-            .decode(type: T.self, decoder: decoder)
+            .decode(type: T.self, decoder: decoder ?? self.jsonDecoder)
             .mapError { error in
                 self.urlError(error)
             }
@@ -54,26 +62,16 @@ struct StarWarsHTTPSClient: PlanetsService {
 
     private func httpError(for statusCode: Int) -> APIError {
         switch statusCode {
-        case 400:
-            return APIError.badRequest
-        case 401:
-            return APIError.unauthorized
-        case 403:
-            return APIError.forbidden
-        case 404:
-            return APIError.notFound
-        case 429:
-            return APIError.tooManyRequests
-        case 500:
-            return APIError.serverError
-        case 502:
-            return APIError.badGateway
-        case 503:
-            return APIError.serviceUnavailable
-        case 504:
-            return APIError.gatewayTimeout
-        default:
-            return APIError.unexpectedStatusCode(statusCode)
+        case 400: return .badRequest
+        case 401: return .unauthorized
+        case 403: return .forbidden
+        case 404: return .notFound
+        case 429: return .tooManyRequests
+        case 500: return .serverError
+        case 502: return .badGateway
+        case 503: return .serviceUnavailable
+        case 504: return .gatewayTimeout
+        default: return .unexpectedStatusCode(statusCode)
         }
     }
 
@@ -85,26 +83,13 @@ struct StarWarsHTTPSClient: PlanetsService {
 
         if let urlError = error as? URLError {
             switch urlError.code {
-            case .notConnectedToInternet:
-                return .noConnection
-
-            case .timedOut:
-                return .timeout
-
-            case .cannotFindHost:
-                return .hostNotFound
-
-            case .cannotConnectToHost:
-                return .connectionFailed
-
-            case .secureConnectionFailed:
-                return .sslError
-
-            case .networkConnectionLost:
-                return .connectionLost
-
-            default:
-                return .badConnection
+            case .notConnectedToInternet: return .noConnection
+            case .timedOut: return .timeout
+            case .cannotFindHost: return .hostNotFound
+            case .cannotConnectToHost: return .connectionFailed
+            case .secureConnectionFailed: return .sslError
+            case .networkConnectionLost: return .connectionLost
+            default: return .badConnection
             }
         }
 
