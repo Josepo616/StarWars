@@ -30,3 +30,12 @@ struct MockPlanetsServiceFailure: PlanetsService {
         return Fail(error: APIError.notFound).eraseToAnyPublisher()
     }
 }
+
+struct MockPlanetsServiceEmpty: PlanetsService {
+    func fetchPlanets(from url: String) -> AnyPublisher<[PlanetsModel], APIError> {
+        return Just<[PlanetsModel]>([]) // respuesta vacía
+            .setFailureType(to: APIError.self)
+            .eraseToAnyPublisher()
+    }
+}
+

@@ -24,5 +24,7 @@ struct PageButton: View {
         .foregroundColor(.white)
         .cornerRadius(8)
         .disabled(isSelected)
+        .accessibilityIdentifier("pageButton_\(number)") // <-- IDENTIFIER
+        .accessibilityLabel("Page \(number)")
     }
 }
