@@ -83,6 +83,7 @@ struct StarWarsHTTPSClient: PlanetsService {
 
         if let urlError = error as? URLError {
             switch urlError.code {
+            case .badURL: return .badUrl
             case .notConnectedToInternet: return .noConnection
             case .timedOut: return .timeout
             case .cannotFindHost: return .hostNotFound

@@ -18,5 +18,6 @@ struct SubmitButton: View {
             .foregroundColor(.white)
             .background(isEnabled ? Color.blue : Color.gray)
             .cornerRadius(8)
+            .accessibilityIdentifier("submitButton")
     }
 }

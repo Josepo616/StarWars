@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+//import ViewInspector
+
 struct PaginationControls: View {
 
     @Binding var currentPage: Int

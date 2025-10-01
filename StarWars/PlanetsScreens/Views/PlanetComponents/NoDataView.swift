@@ -32,5 +32,6 @@ struct NoDataView: View {
             Text(error.localizedDescription)
                 .foregroundColor(Color.red)
         }
+        .accessibilityIdentifier("Error")
     }
 }
