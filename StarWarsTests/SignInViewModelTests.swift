@@ -10,17 +10,33 @@ import Combine
 @testable import StarWars
 
 final class SignInViewModelTests: XCTestCase {
+
     var cancellables = Set<AnyCancellable>()
 
-    func test_signInViewModel_validForm_becomesValid() {
-        let vm = SignInViewModel()
+    override func setUp() {
+        super.setUp()
+        cancellables = []
+    }
 
+    override func tearDown() {
+        cancellables.removeAll()
+        super.tearDown()
+    }
+
+    func testSignInViewModelValidFormBecomesValid() {
+        // Given
+        let vm = SignInViewModel()
         let exp = expectation(description: "form becomes valid")
-        vm.$isFormValid.dropFirst().sink { isValid in
-            if isValid {
-                exp.fulfill()
+
+        // When
+        vm.$isFormValid
+            .dropFirst()
+            .sink { isValid in
+                if isValid {
+                    exp.fulfill()
+                }
             }
-        }.store(in: &cancellables)
+            .store(in: &cancellables)
 
         vm.formModel.name = "John"
         vm.formModel.lastName = "Doe"
@@ -31,6 +47,103 @@ final class SignInViewModelTests: XCTestCase {
         vm.formModel.documentNumber = "12345678"
 
         wait(for: [exp], timeout: 1.0)
+
+        // Then
         XCTAssertTrue(vm.isFormValid)
+    }
+
+    func testSignInViewModelEmptyNameBecomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.name = ""
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.name)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_emptyLastName_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.lastName = ""
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.lastName)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_ageZero_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.age = 0
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.age)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_emptyPhone_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.numberPhone = ""
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.numberPhone)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_invalidEmail_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.email = "invalidemail"
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.email)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_emptyDocumentType_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.documentType = ""
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.documentType)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_emptyDocumentNumber_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+        vm.formModel.documentNumber = ""
+
+        // When
+        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.documentNumber)
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
+    }
+
+    func test_signInViewModel_allFieldsEmpty_becomesInvalid() {
+        // Given
+        let vm = SignInViewModel()
+
+        // When
+        // Nothing is set
+
+        // Then
+        XCTAssertFalse(vm.isFormValid)
     }
 }

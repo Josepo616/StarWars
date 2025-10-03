@@ -30,6 +30,7 @@ enum APIError: Error, Equatable {
     case gatewayTimeout  // 504
     case unexpectedStatusCode(Int)
 
+
     // Others
     case decodingError
     case badResponse

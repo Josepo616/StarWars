@@ -21,7 +21,7 @@ enum TestFactory {
         )
     }
 
-    static func samplePlanetJSON() -> Data {
+    static func samplePlanetJSON() -> Data? {
         let planet = samplePlanetModel()
         let dict: [String: Any] = [
             "url": planet.id,
@@ -33,6 +33,6 @@ enum TestFactory {
             "population": planet.population
         ]
         let arr = [dict]
-        return try! JSONSerialization.data(withJSONObject: arr, options: [])
+        return try? JSONSerialization.data(withJSONObject: arr, options: [])
     }
 }

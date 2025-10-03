@@ -8,19 +8,29 @@
 import Combine
 import Foundation
 
-struct StarWarsHTTPSClient: PlanetsService {
+struct StarWarsHTTPSClient: PlanetsService, StarWarsPlanetsHTTPMethodsProtocol {
 
-    private let session: URLSession
+    private let publisherProvider: DataPublisherProviderProtocol
     private let jsonDecoder: JSONDecoder
 
-    init(session: URLSession = .shared, decoder: JSONDecoder = JSONDecoder()) {
-        self.session = session
+    init(
+        session: URLSession = .shared,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.publisherProvider = URLSessionDataPublisher(session: session)
         self.jsonDecoder = decoder
     }
 
-    func fetchPlanets(from url: String) -> AnyPublisher<
-        [PlanetsModel], APIError
-    > {
+    // Este init es solo para tests
+    init(
+        publisherProvider: DataPublisherProviderProtocol,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.publisherProvider = publisherProvider
+        self.jsonDecoder = decoder
+    }
+
+    func fetchPlanets(from url: String) -> AnyPublisher<[PlanetsModel], APIError> {
         return getMethod(from: url, type: [PlanetsModel].self)
     }
 
@@ -31,13 +41,12 @@ struct StarWarsHTTPSClient: PlanetsService {
     ) -> AnyPublisher<T, APIError> {
 
         guard let url = URL(string: urlString) else {
-            print("Invalid URL")
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
 
         let urlRequest = URLRequest(url: url)
 
-        return session.dataTaskPublisher(for: urlRequest)
+        return publisherProvider.dataPublisher(for: urlRequest)
             .tryMap { result in
                 guard let httpResponse = result.response as? HTTPURLResponse
                 else {
@@ -58,9 +67,10 @@ struct StarWarsHTTPSClient: PlanetsService {
             .eraseToAnyPublisher()
     }
 
+
     // MARK: - Error handling
 
-    private func httpError(for statusCode: Int) -> APIError {
+     private func httpError(for statusCode: Int) -> APIError {
         switch statusCode {
         case 400: return .badRequest
         case 401: return .unauthorized

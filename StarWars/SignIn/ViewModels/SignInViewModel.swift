@@ -78,9 +78,3 @@ class SignInViewModel: ObservableObject {
         }
     }
 }
-
-// MARK: - enums
-
-enum FieldState {
-    case idle, typing, success, failure
-}
