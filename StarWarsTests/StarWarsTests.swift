@@ -53,4 +53,21 @@ final class StarWarsTests: XCTestCase {
         // Then
         XCTAssertEqual(resultPlanets?.first?.name, "Tatooine")
     }
+    
+    func testDecodePlanetJSON() {
+        guard let jsonData = TestFactory.samplePlanetJSON() else {
+            XCTFail("Failed to load mock planet JSON.")
+            return
+        }
+        
+        let decoder = JSONDecoder()
+        do {
+            let planets = try decoder.decode([PlanetsModel].self, from: jsonData)
+            XCTAssertEqual(planets.count, 1)
+            XCTAssertEqual(planets.first?.name, "Tatooine")
+            XCTAssertEqual(planets.first?.diameter, "10465")
+        } catch {
+            XCTFail("Failed to decode planet JSON: \(error)")
+        }
+    }
 }

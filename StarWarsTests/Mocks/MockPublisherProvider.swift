@@ -16,7 +16,7 @@ struct MockPublisherProvider: DataPublisherProviderProtocol {
         (data: Data, response: URLResponse), URLError
     > {
         result
-            .map { data, response in (data: data, response: response) }  // 👈 esta línea nombra los campos
+            .map { data, response in (data: data, response: response) }
             .publisher
             .eraseToAnyPublisher()
     }

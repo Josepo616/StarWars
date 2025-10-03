@@ -64,7 +64,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_emptyLastName_becomesInvalid() {
+    func testSignInViewModelEmptyLastNameBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.lastName = ""
@@ -76,7 +76,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_ageZero_becomesInvalid() {
+    func testSignInViewModelAgeZeroBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.age = 0
@@ -88,7 +88,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_emptyPhone_becomesInvalid() {
+    func testSignInViewModelEmptyPhoneBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.numberPhone = ""
@@ -100,7 +100,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_invalidEmail_becomesInvalid() {
+    func testSignInViewModelInvalidEmailBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.email = "invalidemail"
@@ -112,7 +112,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_emptyDocumentType_becomesInvalid() {
+    func testSignInViewModelEmptyDocumentTypeBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.documentType = ""
@@ -124,7 +124,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_emptyDocumentNumber_becomesInvalid() {
+    func testSignInViewModelEmptyDocumentNumberBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
         vm.formModel.documentNumber = ""
@@ -136,7 +136,7 @@ final class SignInViewModelTests: XCTestCase {
         XCTAssertFalse(vm.isFormValid)
     }
 
-    func test_signInViewModel_allFieldsEmpty_becomesInvalid() {
+    func testSignInViewModelAllFieldsEmptyBecomesInvalid() {
         // Given
         let vm = SignInViewModel()
 

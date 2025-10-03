@@ -14,7 +14,7 @@ final class PaginationControlsUITests: XCTestCase {
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchEnvironment["UITesting_ShowPagination"] = "1"
+        app.launchEnvironment["UITestingShowPagination"] = "1"
         app.launch()
     }
 
@@ -22,15 +22,14 @@ final class PaginationControlsUITests: XCTestCase {
         app = nil
     }
 
-    func test_initialPageIsOne() throws {
-        // El host muestra "Current page: X" con accessibilityIdentifier "currentPageLabel"
+    func testInitialPageIsOne() throws {
         let currentPageLabel = app.staticTexts["currentPageLabel"]
         XCTAssertTrue(currentPageLabel.waitForExistence(timeout: 2))
         XCTAssertEqual(currentPageLabel.label, "Current page: 1")
     }
 
-    func test_tappingPageButton_updatesCurrentPageLabel() throws {
-        let button3 = app.buttons["pageButton_3"]
+    func testTappingPageButtonUpdatesCurrentPageLabel() throws {
+        let button3 = app.buttons["pageButton3"]
         XCTAssertTrue(button3.waitForExistence(timeout: 2))
         button3.tap()
 
@@ -39,15 +38,15 @@ final class PaginationControlsUITests: XCTestCase {
         XCTAssertEqual(currentPageLabel.label, "Current page: 3")
     }
     
-    func test_tappingPage3_showsFollowingPages() throws {
+    func testTappingPage3ShowsFollowingPages() throws {
         // Tap page 3 (index 3 -> label "3")
-        let button3 = app.buttons["pageButton_3"]
+        let button3 = app.buttons["pageButton3"]
         XCTAssertTrue(button3.waitForExistence(timeout: 2))
         button3.tap()
 
         // Now page 4 and 5 should appear in the pagination controls (since window centers around currentPage)
-        let button4 = app.buttons["pageButton_4"]
-        let button5 = app.buttons["pageButton_5"]
+        let button4 = app.buttons["pageButton4"]
+        let button5 = app.buttons["pageButton5"]
 
         // If they are offscreen, try to swipe the scrollView until they exist/hittable
         if !button4.exists || !button5.exists || !button4.isHittable {
@@ -69,8 +68,8 @@ final class PaginationControlsUITests: XCTestCase {
         XCTAssertEqual(currentPageLabel.label, "Current page: 4")
     }
 
-    func test_tappingLastPageButton_updatesCurrentPageLabel() throws {
-        let buttonLast = app.buttons["pageButton_15"]
+    func testTappingLastPageButtonUpdatesCurrentPageLabel() throws {
+        let buttonLast = app.buttons["pageButton15"]
         XCTAssertTrue(buttonLast.waitForExistence(timeout: 2))
         buttonLast.tap()
 
@@ -79,11 +78,10 @@ final class PaginationControlsUITests: XCTestCase {
         XCTAssertEqual(currentPageLabel.label, "Current page: 15")
     }
 
-    func test_ellipsisExists_whenPagesTruncated() throws {
-        let ellipsis = app.staticTexts["pagination_ellipsis"]
+    func testEllipsisExistsWhenPagesTruncated() throws {
+        let ellipsis = app.staticTexts["paginationEllipsis"]
         XCTAssertTrue(ellipsis.waitForExistence(timeout: 2), "Expected ellipsis identifier to exist")
 
-        // si hace falta hacer scroll para verlo:
         if !ellipsis.isHittable {
             let scrollView = app.scrollViews.firstMatch
             if scrollView.exists {

@@ -32,7 +32,7 @@ struct PaginationControls: View {
                             Text("...")
                                 .padding(10)
                                 .foregroundColor(.gray)
-                                .accessibilityIdentifier("pagination_ellipsis")
+                                .accessibilityIdentifier("paginationEllipsis")
                         } else {
                             PageButton(
                                 number: page + 1,

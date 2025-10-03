@@ -24,7 +24,7 @@ class PlanetsViewModel: ObservableObject {
     func loadPlanetsOnStart() {
         self.loadingComplete = false
         
-        if ProcessInfo.processInfo.environment["UITesting_ForceError"] == "1" {
+        if ProcessInfo.processInfo.environment["UITestingForceError"] == "1" {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 self.apiError = .badConnection
                 self.loadingComplete = true

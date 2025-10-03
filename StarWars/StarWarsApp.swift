@@ -16,7 +16,7 @@ struct StarWarsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            if ProcessInfo.processInfo.environment["UITesting_ShowPagination"]
+            if ProcessInfo.processInfo.environment["UITestingShowPagination"]
                 == "1"
             {
                 PaginationTestHostView(

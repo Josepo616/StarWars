@@ -25,6 +25,7 @@ final class HelperFunctions: XCTestCase {
         super.tearDown()
     }
     
+    // MARK: - Error Testing helpers
     func performErrorMappingTest(
         result: Result<(Data, URLResponse), URLError>,
         expectedError: APIError,
@@ -59,6 +60,7 @@ final class HelperFunctions: XCTestCase {
         )
     }
     
+    // MARK: - Planets view model tests helpers
     enum TestFactory {
         static func samplePlanet(id: Int) -> PlanetsModel {
             PlanetsModel(
@@ -77,7 +79,7 @@ final class HelperFunctions: XCTestCase {
         }
     }
     
-    // MARK: - Helpers
+    // MARK: - Form view model tests helpers
 
     static func fillValidFormExcept<T>(_ vm: SignInViewModel, except keyPath: WritableKeyPath<SignInFormModel, T>) {
         vm.formModel.name = "John"
@@ -88,7 +90,6 @@ final class HelperFunctions: XCTestCase {
         vm.formModel.documentType = "ID"
         vm.formModel.documentNumber = "12345678"
 
-        // Set the excluded field to a "bad" value
         switch keyPath {
         case \SignInFormModel.name: vm.formModel.name = ""
         case \SignInFormModel.lastName: vm.formModel.lastName = ""

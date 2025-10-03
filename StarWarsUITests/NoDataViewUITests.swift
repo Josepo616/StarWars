@@ -15,8 +15,8 @@ final class NoDataViewUITests: XCTestCase {
         continueAfterFailure = false
         app = XCUIApplication()
 
-        app.launchEnvironment["UITesting_ValidForm"] = "1"
-        app.launchEnvironment["UITesting_ForceError"] = "1"
+        app.launchEnvironment["UITestingValidForm"] = "1"
+        app.launchEnvironment["UITestingForceError"] = "1"
 
         app.launch()
     }
@@ -25,7 +25,7 @@ final class NoDataViewUITests: XCTestCase {
         app = nil
     }
 
-    func test_noDataAlert_showsAndOKDismisses() throws {
+    func testNoDataAlertShowsAndOKDismisses() throws {
         let submitButton = app.buttons["submitButton"]
         XCTAssertTrue(submitButton.waitForExistence(timeout: 5), "Submit button should exist")
         submitButton.tap()
@@ -41,21 +41,18 @@ final class NoDataViewUITests: XCTestCase {
     }
 
 
-    func test_noDataAlert_tryAgain_triggersReload() throws {
+    func testNoDataAlertTryAgainTriggersReload() throws {
         let submitButton = app.buttons["submitButton"]
         XCTAssertTrue(submitButton.waitForExistence(timeout: 5), "Submit button should exist")
         submitButton.tap()
 
-        // Asegúrate de que el error esté presente
         let errorAlert = app.alerts["Error"]
         XCTAssertTrue(errorAlert.waitForExistence(timeout: 5.0), "Expected Error alert to be presented")
 
-        // Toca el botón "Try Again" para intentar recargar
         let tryAgainButton = errorAlert.buttons["Try Again"]
         XCTAssertTrue(tryAgainButton.exists, "Try Again button should exist in the Error alert")
         tryAgainButton.tap()
 
-        // Esperamos que el texto de "Loading planets..." reaparezca, indicando que se está intentando recargar
         let loadingText = app.staticTexts["Loading planets..."]
         XCTAssertTrue(loadingText.waitForExistence(timeout: 5.0), "Expected Loading planets... to appear after tapping Try Again")
     }

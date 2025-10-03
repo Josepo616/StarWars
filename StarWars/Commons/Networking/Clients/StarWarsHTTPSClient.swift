@@ -21,7 +21,7 @@ struct StarWarsHTTPSClient: PlanetsService, StarWarsPlanetsHTTPMethodsProtocol {
         self.jsonDecoder = decoder
     }
 
-    // Este init es solo para tests
+    // Tests init
     init(
         publisherProvider: DataPublisherProviderProtocol,
         decoder: JSONDecoder = JSONDecoder()
