@@ -27,6 +27,7 @@ final class ErrorMappingTests: XCTestCase {
 
     // MARK: - URLError Tests
     func testFetchPlanetsMapsURLErrorToExpectedAPIError() {
+        /// Given
         let testCases: [(URLError.Code, APIError)] = [
             (.badURL, .badUrl),
             (.notConnectedToInternet, .noConnection),
@@ -39,7 +40,9 @@ final class ErrorMappingTests: XCTestCase {
         ]
 
         for (urlErrorCode, expectedError) in testCases {
+            /// When
             let error = URLError(urlErrorCode)
+            /// Then
             HelperFunctions().performErrorMappingTest(
                 result: .failure(error),
                 expectedError: expectedError,
@@ -50,6 +53,7 @@ final class ErrorMappingTests: XCTestCase {
 
     // MARK: - Status HTTP Error Tests
     func testFetchPlanetsMapsHTTPStatusCodeToExpectedAPIError() {
+        /// Given
         let testCases: [(Int, APIError)] = [
             (400, .badRequest),
             (401, .unauthorized),
@@ -64,6 +68,7 @@ final class ErrorMappingTests: XCTestCase {
         ]
 
         for (statusCode, expectedError) in testCases {
+            /// When
             let response = HTTPURLResponse(
                 url: URL(string: "https://starwars.api")!,
                 statusCode: statusCode,
@@ -71,6 +76,7 @@ final class ErrorMappingTests: XCTestCase {
                 headerFields: nil
             )!
             let dummyData = Data()
+            /// When
             HelperFunctions().performErrorMappingTest(
                 result: .success((dummyData, response)),
                 expectedError: expectedError,

@@ -27,15 +27,15 @@ final class PlanetsViewModelTests: XCTestCase {
     // MARK: - Tests
 
     func testPlanetsViewModelLoadsPlanetsUsingMockService() {
-        // Given
+        /// Given
         let vm = PlanetsViewModel(planetsService: MockPlanetsServiceSuccess())
         let exp = expectation(description: "planets loaded")
 
-        // When
+        /// When
         vm.$planets
             .dropFirst()
             .sink { planets in
-                // Then
+                /// Then
                 XCTAssertEqual(planets.count, 1)
                 XCTAssertEqual(planets.first?.name, "Tatooine")
                 exp.fulfill()
@@ -47,14 +47,14 @@ final class PlanetsViewModelTests: XCTestCase {
     }
 
     func testPlanetsViewModelHandlesFailureUsingMockService() {
-        // Given
+        /// Given
         let vm = PlanetsViewModel(planetsService: MockPlanetsServiceFailure())
         let exp = expectation(description: "planets failed")
 
-        // When
+        /// When
         vm.$planets
             .sink { planets in
-                // Then
+                /// Then
                 XCTAssertEqual(planets.count, 0)
                 exp.fulfill()
             }
@@ -65,14 +65,14 @@ final class PlanetsViewModelTests: XCTestCase {
     }
 
     func testTotalPagesCalculationWithExactAndPartialPages() {
-        // Given
+        /// Given
         let planets = HelperFunctions.TestFactory.samplePlanets(count: 10)
         let vm = PlanetsViewModel(
             planetsService: MockPlanetsServiceArray(planets: planets)
         )
         let exp = expectation(description: "planets loaded")
 
-        // When
+        /// When
         vm.$planets
             .dropFirst()
             .sink { loaded in
@@ -85,7 +85,7 @@ final class PlanetsViewModelTests: XCTestCase {
         vm.loadPlanetsOnStart()
         wait(for: [exp], timeout: 1.0)
 
-        // Then
+        /// Then
         XCTAssertEqual(vm.planets.count, 10)
         XCTAssertEqual(vm.totalPages(4), 3)
         XCTAssertEqual(vm.totalPages(5), 2)
@@ -93,14 +93,14 @@ final class PlanetsViewModelTests: XCTestCase {
     }
 
     func testCurrentPageItemsReturnsCorrectSlices() {
-        // Given
+        /// Given
         let planets = HelperFunctions.TestFactory.samplePlanets(count: 10)
         let vm = PlanetsViewModel(
             planetsService: MockPlanetsServiceArray(planets: planets)
         )
         let exp = expectation(description: "planets loaded for slicing")
 
-        // When
+        /// When
         vm.$planets
             .dropFirst()
             .sink { loaded in
@@ -113,7 +113,7 @@ final class PlanetsViewModelTests: XCTestCase {
         vm.loadPlanetsOnStart()
         wait(for: [exp], timeout: 1.0)
 
-        // Then
+        /// Then
         let page0 = vm.currentPageItems(0, 4)
         XCTAssertEqual(page0.count, 4)
         XCTAssertEqual(page0.first?.name, "Planet 1")

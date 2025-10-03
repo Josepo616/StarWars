@@ -28,11 +28,10 @@ final class StarWarsTests: XCTestCase {
     }
 
     func testFetchPlanetsSuccessReturnsExpectedData() {
-        // Given
+        /// Given
         let exp = expectation(description: "Fetch planets success")
         var resultPlanets: [PlanetsModel]?
-
-        // When
+        /// When
         service.fetchPlanets(from: "https://swapi.info/api/planets/")
             .sink(
                 receiveCompletion: { completion in
@@ -49,12 +48,12 @@ final class StarWarsTests: XCTestCase {
             .store(in: &cancellables)
 
         wait(for: [exp], timeout: 1.0)
-
-        // Then
+        /// Then
         XCTAssertEqual(resultPlanets?.first?.name, "Tatooine")
     }
     
     func testDecodePlanetJSON() {
+        /// Given
         guard let jsonData = TestFactory.samplePlanetJSON() else {
             XCTFail("Failed to load mock planet JSON.")
             return
@@ -62,11 +61,14 @@ final class StarWarsTests: XCTestCase {
         
         let decoder = JSONDecoder()
         do {
+            /// When
             let planets = try decoder.decode([PlanetsModel].self, from: jsonData)
+            /// Then
             XCTAssertEqual(planets.count, 1)
             XCTAssertEqual(planets.first?.name, "Tatooine")
             XCTAssertEqual(planets.first?.diameter, "10465")
         } catch {
+            /// Then
             XCTFail("Failed to decode planet JSON: \(error)")
         }
     }

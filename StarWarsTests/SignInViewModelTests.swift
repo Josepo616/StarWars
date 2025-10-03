@@ -5,8 +5,9 @@
 //  Created by JoseAlvarez on 9/30/25.
 //
 
-import XCTest
 import Combine
+import XCTest
+
 @testable import StarWars
 
 final class SignInViewModelTests: XCTestCase {
@@ -24,11 +25,10 @@ final class SignInViewModelTests: XCTestCase {
     }
 
     func testSignInViewModelValidFormBecomesValid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         let exp = expectation(description: "form becomes valid")
-
-        // When
+        /// When
         vm.$isFormValid
             .dropFirst()
             .sink { isValid in
@@ -45,105 +45,99 @@ final class SignInViewModelTests: XCTestCase {
         vm.formModel.email = "a@b.com"
         vm.formModel.documentType = "ID"
         vm.formModel.documentNumber = "12345678"
-
         wait(for: [exp], timeout: 1.0)
-
-        // Then
+        /// Then
         XCTAssertTrue(vm.isFormValid)
     }
 
     func testSignInViewModelEmptyNameBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.name = ""
-
-        // When
+        /// When
         HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.name)
-
-        // Then
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelEmptyLastNameBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.lastName = ""
-
-        // When
-        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.lastName)
-
-        // Then
+        /// When
+        HelperFunctions.fillValidFormExcept(
+            vm,
+            except: \SignInFormModel.lastName
+        )
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelAgeZeroBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.age = 0
-
-        // When
+        /// When
         HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.age)
-
-        // Then
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelEmptyPhoneBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.numberPhone = ""
-
-        // When
-        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.numberPhone)
-
-        // Then
+        /// When
+        HelperFunctions.fillValidFormExcept(
+            vm,
+            except: \SignInFormModel.numberPhone
+        )
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelInvalidEmailBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.email = "invalidemail"
-
-        // When
+        /// When
         HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.email)
-
-        // Then
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelEmptyDocumentTypeBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.documentType = ""
-
-        // When
-        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.documentType)
-
-        // Then
+        /// When
+        HelperFunctions.fillValidFormExcept(
+            vm,
+            except: \SignInFormModel.documentType
+        )
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelEmptyDocumentNumberBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
         vm.formModel.documentNumber = ""
-
-        // When
-        HelperFunctions.fillValidFormExcept(vm, except: \SignInFormModel.documentNumber)
-
-        // Then
+        /// When
+        HelperFunctions.fillValidFormExcept(
+            vm,
+            except: \SignInFormModel.documentNumber
+        )
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 
     func testSignInViewModelAllFieldsEmptyBecomesInvalid() {
-        // Given
+        /// Given
         let vm = SignInViewModel()
-
-        // When
-        // Nothing is set
-
-        // Then
+        /// When
+        /// Nothing is set
+        /// Then
         XCTAssertFalse(vm.isFormValid)
     }
 }
