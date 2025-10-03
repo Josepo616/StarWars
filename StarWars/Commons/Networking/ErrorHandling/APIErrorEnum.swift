@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIError: Error {
+enum APIError: Error, Equatable {
     // URL / red
     case badUrl
     case badConnection
@@ -29,6 +29,7 @@ enum APIError: Error {
     case serviceUnavailable  // 503
     case gatewayTimeout  // 504
     case unexpectedStatusCode(Int)
+
 
     // Others
     case decodingError

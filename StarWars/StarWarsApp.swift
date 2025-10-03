@@ -9,11 +9,26 @@ import SwiftUI
 
 @main
 struct StarWarsApp: App {
+    @ObservedObject private var sigInViewModel = SignInViewModel()
+    @ObservedObject private var planetViewModel = PlanetsViewModel(
+        planetsService: StarWarsHTTPSClient()
+    )
 
-    
     var body: some Scene {
         WindowGroup {
-            SignInView()
+            if ProcessInfo.processInfo.environment["UITestingShowPagination"]
+                == "1"
+            {
+                PaginationTestHostView(
+                    planetViewModel: planetViewModel,
+                    totalPages: 15
+                )
+            } else {
+                SignInView(
+                    signInViewModel: sigInViewModel,
+                    planetViewModel: planetViewModel
+                )
+            }
         }
     }
 }

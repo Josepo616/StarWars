@@ -10,9 +10,8 @@ import SwiftUI
 
 struct PlanetsView: View {
 
-    @StateObject private var viewModel = PlanetsViewModel(
-        planetsService: StarWarsHTTPSClient()
-    )
+    @StateObject var viewModel: PlanetsViewModel
+    
 
     var body: some View {
         VStack {
@@ -28,8 +27,4 @@ struct PlanetsView: View {
         .navigationTitle(Text("Planets"))
         .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-#Preview {
-    PlanetsView()
 }

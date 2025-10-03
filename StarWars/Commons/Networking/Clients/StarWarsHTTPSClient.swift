@@ -8,28 +8,45 @@
 import Combine
 import Foundation
 
-struct StarWarsHTTPSClient: PlanetsService {
+struct StarWarsHTTPSClient: PlanetsService, StarWarsPlanetsHTTPMethodsProtocol {
 
-    func fetchPlanets(from url: String) -> AnyPublisher<
-        [PlanetsModel], APIError
-    > {
+    private let publisherProvider: DataPublisherProviderProtocol
+    private let jsonDecoder: JSONDecoder
+
+    init(
+        session: URLSession = .shared,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.publisherProvider = URLSessionDataPublisher(session: session)
+        self.jsonDecoder = decoder
+    }
+
+    // Tests init
+    init(
+        publisherProvider: DataPublisherProviderProtocol,
+        decoder: JSONDecoder = JSONDecoder()
+    ) {
+        self.publisherProvider = publisherProvider
+        self.jsonDecoder = decoder
+    }
+
+    func fetchPlanets(from url: String) -> AnyPublisher<[PlanetsModel], APIError> {
         return getMethod(from: url, type: [PlanetsModel].self)
     }
 
     func getMethod<T: Decodable>(
         from urlString: String,
         type: T.Type,
-        decoder: JSONDecoder = JSONDecoder()
+        decoder: JSONDecoder? = nil
     ) -> AnyPublisher<T, APIError> {
 
         guard let url = URL(string: urlString) else {
-            print("Invalid URL")
             return Fail(error: APIError.badUrl).eraseToAnyPublisher()
         }
 
         let urlRequest = URLRequest(url: url)
 
-        return URLSession.shared.dataTaskPublisher(for: urlRequest)
+        return publisherProvider.dataPublisher(for: urlRequest)
             .tryMap { result in
                 guard let httpResponse = result.response as? HTTPURLResponse
                 else {
@@ -42,7 +59,7 @@ struct StarWarsHTTPSClient: PlanetsService {
 
                 return result.data
             }
-            .decode(type: T.self, decoder: decoder)
+            .decode(type: T.self, decoder: decoder ?? self.jsonDecoder)
             .mapError { error in
                 self.urlError(error)
             }
@@ -50,30 +67,21 @@ struct StarWarsHTTPSClient: PlanetsService {
             .eraseToAnyPublisher()
     }
 
+
     // MARK: - Error handling
 
-    private func httpError(for statusCode: Int) -> APIError {
+     private func httpError(for statusCode: Int) -> APIError {
         switch statusCode {
-        case 400:
-            return APIError.badRequest
-        case 401:
-            return APIError.unauthorized
-        case 403:
-            return APIError.forbidden
-        case 404:
-            return APIError.notFound
-        case 429:
-            return APIError.tooManyRequests
-        case 500:
-            return APIError.serverError
-        case 502:
-            return APIError.badGateway
-        case 503:
-            return APIError.serviceUnavailable
-        case 504:
-            return APIError.gatewayTimeout
-        default:
-            return APIError.unexpectedStatusCode(statusCode)
+        case 400: return .badRequest
+        case 401: return .unauthorized
+        case 403: return .forbidden
+        case 404: return .notFound
+        case 429: return .tooManyRequests
+        case 500: return .serverError
+        case 502: return .badGateway
+        case 503: return .serviceUnavailable
+        case 504: return .gatewayTimeout
+        default: return .unexpectedStatusCode(statusCode)
         }
     }
 
@@ -85,26 +93,14 @@ struct StarWarsHTTPSClient: PlanetsService {
 
         if let urlError = error as? URLError {
             switch urlError.code {
-            case .notConnectedToInternet:
-                return .noConnection
-
-            case .timedOut:
-                return .timeout
-
-            case .cannotFindHost:
-                return .hostNotFound
-
-            case .cannotConnectToHost:
-                return .connectionFailed
-
-            case .secureConnectionFailed:
-                return .sslError
-
-            case .networkConnectionLost:
-                return .connectionLost
-
-            default:
-                return .badConnection
+            case .badURL: return .badUrl
+            case .notConnectedToInternet: return .noConnection
+            case .timedOut: return .timeout
+            case .cannotFindHost: return .hostNotFound
+            case .cannotConnectToHost: return .connectionFailed
+            case .secureConnectionFailed: return .sslError
+            case .networkConnectionLost: return .connectionLost
+            default: return .badConnection
             }
         }
 

@@ -13,5 +13,7 @@ struct LoadingView: View {
         ProgressView("Loading planets...")
             .progressViewStyle(CircularProgressViewStyle())
             .padding()
+            .accessibilityIdentifier("loadingPlanetsText")
+            .accessibilityAddTraits(.isStaticText)
     }
 }

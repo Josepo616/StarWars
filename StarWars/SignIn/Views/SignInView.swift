@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SignInView: View {
 
-    @StateObject var viewModel = SignInViewModel()
+    @StateObject var signInViewModel: SignInViewModel
+    @StateObject var planetViewModel: PlanetsViewModel
 
     var body: some View {
         NavigationStack {
@@ -23,27 +24,27 @@ struct SignInView: View {
 
                     Form {
                         PersonalInformationView(
-                            name: $viewModel.formModel.name,
-                            lastName: $viewModel.formModel.lastName,
-                            age: $viewModel.formModel.age,
-                            viewModel: viewModel
+                            name: $signInViewModel.formModel.name,
+                            lastName: $signInViewModel.formModel.lastName,
+                            age: $signInViewModel.formModel.age,
+                            viewModel: signInViewModel
                         )
                         ContactInformationView(
-                            number: $viewModel.formModel.numberPhone,
-                            email: $viewModel.formModel.email,
-                            viewModel: viewModel
+                            number: $signInViewModel.formModel.numberPhone,
+                            email: $signInViewModel.formModel.email,
+                            viewModel: signInViewModel
                         )
                         DocumentInformationView(
-                            documentType: $viewModel.formModel.documentType,
-                            documentNumber: $viewModel.formModel.documentNumber,
-                            viewModel: viewModel
+                            documentType: $signInViewModel.formModel.documentType,
+                            documentNumber: $signInViewModel.formModel.documentNumber,
+                            viewModel: signInViewModel
                         )
 
                         Section {
-                            NavigationLink(destination: PlanetsView()) {
-                                SubmitButton(isEnabled: viewModel.isFormValid)
+                            NavigationLink(destination: PlanetsView(viewModel: planetViewModel)) {
+                                SubmitButton(isEnabled: signInViewModel.isFormValid)
                             }
-                            .disabled(!viewModel.isFormValid)
+                            .disabled(false)
                             .frame(maxWidth: 400, maxHeight: 700)
                             .cornerRadius(10)
                             .padding(.horizontal)

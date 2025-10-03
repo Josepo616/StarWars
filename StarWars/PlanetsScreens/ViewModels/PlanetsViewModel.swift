@@ -23,6 +23,16 @@ class PlanetsViewModel: ObservableObject {
     // MARK: - Funcs to interact with API
     func loadPlanetsOnStart() {
         self.loadingComplete = false
+        
+        if ProcessInfo.processInfo.environment["UITestingForceError"] == "1" {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                self.apiError = .badConnection
+                self.loadingComplete = true
+            }
+            return
+        }
+
+
         let starWarsPlanetsURL = StarWars(
             id: UUID(),
             endpoint: endpointEnum.planets.rawValue

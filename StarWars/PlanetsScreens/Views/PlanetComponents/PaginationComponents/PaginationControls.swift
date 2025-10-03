@@ -18,11 +18,13 @@ struct PaginationControls: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
 
-                    PageButton(
-                        number: 1,
-                        isSelected: currentPage == 0
-                    ) {
-                        currentPage = 0
+                    if !pageNumbersToShow.contains(0) {
+                        PageButton(
+                            number: 1,
+                            isSelected: currentPage == 0
+                        ) {
+                            currentPage = 0
+                        }
                     }
 
                     ForEach(pageNumbersToShow, id: \.self) { page in
@@ -30,6 +32,7 @@ struct PaginationControls: View {
                             Text("...")
                                 .padding(10)
                                 .foregroundColor(.gray)
+                                .accessibilityIdentifier("paginationEllipsis")
                         } else {
                             PageButton(
                                 number: page + 1,
@@ -40,7 +43,7 @@ struct PaginationControls: View {
                         }
                     }
 
-                    if totalPages > 1 {
+                    if !pageNumbersToShow.contains(totalPages - 1) {
                         PageButton(
                             number: totalPages,
                             isSelected: currentPage == totalPages - 1
